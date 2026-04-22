@@ -35,5 +35,8 @@ out/
 # OS
 .DS_Store
 
-# Frontend (caso use Node futuramente)
+# Frontend
 node_modules/
+
+#properties
+src/main/resources/application.properties

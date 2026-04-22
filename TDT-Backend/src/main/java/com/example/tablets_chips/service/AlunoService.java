@@ -1,0 +1,87 @@
+package com.example.tablets_chips.service;
+
+import com.example.tablets_chips.dto.AlunoRequestDTO;
+import com.example.tablets_chips.dto.AlunoResponseDTO;
+import com.example.tablets_chips.model.Aluno;
+import com.example.tablets_chips.model.Chip;
+import com.example.tablets_chips.repository.AlunoRepository;
+import com.example.tablets_chips.repository.ChipRepository;
+import org.springframework.stereotype.Service;
+import java.util.List;
+
+@Service
+public class AlunoService {
+    private final AlunoRepository alunoRepository;
+    private final ChipRepository chipRepository;
+    public AlunoService(AlunoRepository alunoRepository, ChipRepository chipRepository) {
+        this.alunoRepository = alunoRepository;
+        this.chipRepository = chipRepository;
+    }
+
+    public List<AlunoResponseDTO> listarTodosAlunos() {
+        return alunoRepository.findAll()
+                .stream()
+                .map(this::toDTO)
+                .toList();
+    }
+
+    public AlunoResponseDTO buscarPorId(Integer id) {
+        Aluno aluno = alunoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
+
+        return toDTO(aluno);
+    }
+
+    public AlunoResponseDTO criarAluno(AlunoRequestDTO dto) {
+        Aluno aluno = new Aluno();
+
+        aluno.setNome(dto.nome());
+        aluno.setEol(dto.eol());
+        aluno.setTurma(dto.turma());
+        aluno.setTel1(dto.tel1());
+        aluno.setTel2(dto.tel2());
+        aluno.setDataNasc(dto.dataNasc());
+
+        if (dto.chipId() != null) {
+            Chip chip = chipRepository.findById(dto.chipId())
+                    .orElseThrow(() -> new RuntimeException("Chip não encontrado"));
+            aluno.setChip(chip);
+        }
+
+        return toDTO(alunoRepository.save(aluno));
+    }
+    public AlunoResponseDTO atualizar(Integer id, AlunoRequestDTO dto) {
+        Aluno aluno = alunoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
+
+        aluno.setNome(dto.nome());
+        aluno.setEol(dto.eol());
+        aluno.setTurma(dto.turma());
+        aluno.setTel1(dto.tel1());
+        aluno.setTel2(dto.tel2());
+        aluno.setDataNasc(dto.dataNasc());
+
+        if (dto.chipId() != null) {
+            Chip chip = chipRepository.findById(dto.chipId())
+                    .orElseThrow(() -> new RuntimeException("Chip não encontrado"));
+            aluno.setChip(chip);
+        }
+
+        return toDTO(alunoRepository.save(aluno));
+    }
+        public void deletar(Integer id) {
+            alunoRepository.deleteById(id);
+        }
+    private AlunoResponseDTO toDTO(Aluno aluno) {
+        return new AlunoResponseDTO(
+                aluno.getId(),
+                aluno.getNome(),
+                aluno.getEol(),
+                aluno.getDataNasc(),
+                aluno.getTurma(),
+                aluno.getTel1(),
+                aluno.getTel2()
+        );
+    }
+}
+

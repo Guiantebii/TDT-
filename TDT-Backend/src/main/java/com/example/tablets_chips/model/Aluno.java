@@ -35,6 +35,78 @@ public class Aluno {
     @Column(name = "alu_tel_1")
     private String tel1;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getEol() {
+        return eol;
+    }
+
+    public void setEol(String eol) {
+        this.eol = eol;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public LocalDate getDataNasc() {
+        return dataNasc;
+    }
+
+    public void setDataNasc(LocalDate dataNasc) {
+        this.dataNasc = dataNasc;
+    }
+
+    public String getTurma() {
+        return turma;
+    }
+
+    public void setTurma(String turma) {
+        this.turma = turma;
+    }
+
+    public String getTel1() {
+        return tel1;
+    }
+
+    public void setTel1(String tel1) {
+        this.tel1 = tel1;
+    }
+
+    public Chip getChip() {
+        return chip;
+    }
+
+    public void setChip(Chip chip) {
+        this.chip = chip;
+    }
+
+    public String getTel2() {
+        return tel2;
+    }
+
+    public void setTel2(String tel2) {
+        this.tel2 = tel2;
+    }
+
+    public List<Devolucao> getDevolucoes() {
+        return devolucoes;
+    }
+
+    public void setDevolucoes(List<Devolucao> devolucoes) {
+        this.devolucoes = devolucoes;
+    }
+
     @Column(name = "alu_tel_2")
     private String tel2;
 
