@@ -2,14 +2,18 @@ package com.example.tablets_chips.service;
 
 import com.example.tablets_chips.dto.AlunoRequestDTO;
 import com.example.tablets_chips.dto.AlunoResponseDTO;
+import com.example.tablets_chips.exception.ResourceNotFoundException;
 import com.example.tablets_chips.model.Aluno;
 import com.example.tablets_chips.repository.AlunoRepository;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
 public class AlunoService {
+
     private final AlunoRepository alunoRepository;
+
     public AlunoService(AlunoRepository alunoRepository) {
         this.alunoRepository = alunoRepository;
     }
@@ -23,7 +27,7 @@ public class AlunoService {
 
     public AlunoResponseDTO buscarPorId(Integer id) {
         Aluno aluno = alunoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Aluno não encontrado"));
 
         return toDTO(aluno);
     }
@@ -40,9 +44,10 @@ public class AlunoService {
 
         return toDTO(alunoRepository.save(aluno));
     }
+
     public AlunoResponseDTO atualizar(Integer id, AlunoRequestDTO dto) {
         Aluno aluno = alunoRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Aluno não encontrado"));
+                .orElseThrow(() -> new ResourceNotFoundException("Aluno não encontrado"));
 
         aluno.setNome(dto.nome());
         aluno.setEol(dto.eol());
@@ -51,12 +56,16 @@ public class AlunoService {
         aluno.setTel2(dto.tel2());
         aluno.setDataNasc(dto.dataNasc());
 
-
         return toDTO(alunoRepository.save(aluno));
     }
-        public void deletar(Integer id) {
-            alunoRepository.deleteById(id);
+
+    public void deletar(Integer id) {
+        if (!alunoRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Aluno não encontrado");
         }
+        alunoRepository.deleteById(id);
+    }
+
     private AlunoResponseDTO toDTO(Aluno aluno) {
         return new AlunoResponseDTO(
                 aluno.getId(),
@@ -69,4 +78,3 @@ public class AlunoService {
         );
     }
 }
-
