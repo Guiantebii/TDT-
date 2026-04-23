@@ -54,8 +54,6 @@ async function carregar() {
                 </button>
             </div>
         `;
-
-        // 🔥 feedback extra
         showToast(error.message, "danger");
     }
 }
