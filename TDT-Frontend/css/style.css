@@ -1,0 +1,150 @@
+/* ============================= */
+/*  BASE */
+/* ============================= */
+body {
+    background: #f5f6fa;
+    font-family: "Segoe UI", sans-serif;
+}
+
+hr {
+    opacity: 0.1;
+}
+
+footer {
+    opacity: 0.7;
+}
+
+/* ============================= */
+/* NAVBAR */
+/* ============================= */
+.navbar {
+    background: linear-gradient(90deg, #6a5cff, #4a6cf7);
+    border-bottom: 2px solid rgba(255,255,255,0.1);
+}
+
+.navbar .nav-link {
+    color: rgba(255,255,255,0.8);
+    margin-right: 12px;
+    transition: 0.2s;
+}
+
+.navbar .nav-link:hover {
+    color: #ffffff;
+}
+
+.navbar .nav-link.active {
+    color: #ffffff;
+    position: relative;
+}
+
+.navbar .nav-link.active::after {
+    content: "";
+    position: absolute;
+    bottom: -6px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: white;
+    border-radius: 2px;
+}
+
+/* ============================= */
+/* COMPONENTES */
+/* ============================= */
+
+/* CARD */
+.card {
+    border-radius: 16px;
+    border: none;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+/* BOTÃO */
+.btn-primary {
+    background: linear-gradient(90deg, #6a5cff, #4a6cf7);
+    border: none;
+    border-radius: 50px;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+}
+
+/* TABELA */
+.table {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.table th {
+    font-weight: 600;
+    background-color: #f8f9fa;
+}
+
+.table tbody tr {
+    transition: 0.2s;
+}
+
+.table tbody tr:hover {
+    background-color: #f1f3ff;
+}
+
+/* INPUT BUSCA */
+#busca {
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+#busca:focus {
+    box-shadow: 0 0 0 2px rgba(106,92,255,0.2);
+    border-color: #6a5cff;
+}
+
+/* INFO BOX */
+.info-box {
+    background: #f8f9ff;
+    border-radius: 12px;
+    transition: 0.2s;
+}
+
+.info-box:hover {
+    background: #eef1ff;
+    transform: translateY(-2px);
+}
+
+/* ============================= */
+/* TIPOGRAFIA */
+/* ============================= */
+h5.text-primary {
+    font-weight: 600;
+}
+
+.card small {
+    font-size: 0.8rem;
+}
+
+/* ============================= */
+/* ÍCONES */
+/* ============================= */
+.bi {
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: 0.2s;
+}
+
+.bi-eye:hover {
+    color: #0d6efd;
+}
+
+.bi-pencil:hover {
+    color: #ffc107;
+}
+
+.bi-trash:hover {
+    color: #dc3545;
+}
