@@ -3,19 +3,15 @@ package com.example.tablets_chips.service;
 import com.example.tablets_chips.dto.AlunoRequestDTO;
 import com.example.tablets_chips.dto.AlunoResponseDTO;
 import com.example.tablets_chips.model.Aluno;
-import com.example.tablets_chips.model.Chip;
 import com.example.tablets_chips.repository.AlunoRepository;
-import com.example.tablets_chips.repository.ChipRepository;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
 public class AlunoService {
     private final AlunoRepository alunoRepository;
-    private final ChipRepository chipRepository;
-    public AlunoService(AlunoRepository alunoRepository, ChipRepository chipRepository) {
+    public AlunoService(AlunoRepository alunoRepository) {
         this.alunoRepository = alunoRepository;
-        this.chipRepository = chipRepository;
     }
 
     public List<AlunoResponseDTO> listarTodosAlunos() {
@@ -42,12 +38,6 @@ public class AlunoService {
         aluno.setTel2(dto.tel2());
         aluno.setDataNasc(dto.dataNasc());
 
-        if (dto.chipId() != null) {
-            Chip chip = chipRepository.findById(dto.chipId())
-                    .orElseThrow(() -> new RuntimeException("Chip não encontrado"));
-            aluno.setChip(chip);
-        }
-
         return toDTO(alunoRepository.save(aluno));
     }
     public AlunoResponseDTO atualizar(Integer id, AlunoRequestDTO dto) {
@@ -61,11 +51,6 @@ public class AlunoService {
         aluno.setTel2(dto.tel2());
         aluno.setDataNasc(dto.dataNasc());
 
-        if (dto.chipId() != null) {
-            Chip chip = chipRepository.findById(dto.chipId())
-                    .orElseThrow(() -> new RuntimeException("Chip não encontrado"));
-            aluno.setChip(chip);
-        }
 
         return toDTO(alunoRepository.save(aluno));
     }

@@ -8,7 +8,6 @@ public record AlunoRequestDTO(
         LocalDate dataNasc,
         String turma,
         String tel1,
-        String tel2,
-        Integer chipId
+        String tel2
 ) {
 }
