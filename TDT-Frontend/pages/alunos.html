@@ -6,13 +6,11 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark shadow-sm px-4">
-
     <a class="navbar-brand fw-bold" href="#">Sistema</a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
@@ -21,37 +19,15 @@
 
     <div class="collapse navbar-collapse" id="menu">
         <ul class="navbar-nav ms-4">
-
             <li class="nav-item">
                 <a class="nav-link active fw-semibold" href="#">
                     <i class="bi bi-people"></i> Alunos
                 </a>
             </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <i class="bi bi-tablet"></i> Tablets
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <i class="bi bi-sim"></i> Chips
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <i class="bi bi-arrow-left-right"></i> Devolução
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="#">
-                    <i class="bi bi-tools"></i> Manutenção
-                </a>
-            </li>
-
+            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-tablet"></i> Tablets</a></li>
+            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-sim"></i> Chips</a></li>
+            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-arrow-left-right"></i> Devolução</a></li>
+            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-tools"></i> Manutenção</a></li>
         </ul>
     </div>
 </nav>
@@ -73,9 +49,8 @@
     <div class="card shadow-lg border-0">
 
         <div class="p-3 border-bottom">
-            <input id="busca" class="form-control" placeholder=" Buscar aluno por nome...">
+            <input id="busca" class="form-control" placeholder="Buscar aluno por nome...">
         </div>
-
 
         <div class="table-responsive">
             <table class="table align-middle text-center mb-0">
@@ -87,7 +62,6 @@
                     <th>Ações</th>
                 </tr>
                 </thead>
-
                 <tbody id="tabela-alunos">
                 <tr>
                     <td colspan="4">Carregando...</td>
@@ -96,14 +70,53 @@
             </table>
         </div>
 
-    </div>
 
+    </div>
 </div>
 
 <footer class="text-center mt-5 mb-3 text-muted small">
     © 2026 TDT
 </footer>
 
-<script src="../js/alunos.js"></script>
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+    <div id="toast" class="toast align-items-center text-white border-0">
+        <div class="d-flex">
+            <div class="toast-body" id="toast-message"></div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                    data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalDelete" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <h5 class="modal-title">Confirmar exclusão</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        Deseja realmente excluir este aluno?
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-danger" id="btnConfirmDelete">
+          Excluir
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script type="module" src="../js/alunos.js"></script>
+
 </body>
 </html>
