@@ -1,4 +1,4 @@
-# 📚 Sistema de Gestão de Tablet e chips
+# 📚 Sistema de Gestão de Tablets e chips
 
 Sistema full-stack para gerenciamento de tablets e chips, desenvolvido com
 **Spring Boot (backend)** e **HTML, CSS e JavaScript (frontend)**.
