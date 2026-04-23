@@ -23,6 +23,6 @@ public record AlunoRequestDTO(
         @Pattern(regexp = "\\d{10,11}", message = "Telefone deve conter 10 ou 11 dígitos")
         String tel1,
 
-        @Pattern(regexp = "\\d{10,11}", message = "Telefone deve conter 10 ou 11 dígitos")
+        @Pattern(regexp = "^$|\\d{10,11}", message = "Telefone deve conter 10 ou 11 dígitos")
         String tel2
 ) {}
