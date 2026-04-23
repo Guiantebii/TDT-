@@ -6,43 +6,42 @@ import com.example.tablets_chips.service.AlunoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/alunos")
 public class AlunoController {
+
     private final AlunoService alunoService;
 
     public AlunoController(AlunoService alunoService) {
         this.alunoService = alunoService;
     }
+
     @GetMapping
-    public ResponseEntity<List<AlunoResponseDTO>> listarTodosAlunos(){
+    public ResponseEntity<List<AlunoResponseDTO>> listarTodosAlunos() {
         return ResponseEntity.ok(alunoService.listarTodosAlunos());
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<AlunoResponseDTO> buscarPorId(@PathVariable Integer id){
-        try {
-            return ResponseEntity.ok(alunoService.buscarPorId(id));
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<AlunoResponseDTO> buscarPorId(@PathVariable Integer id) {
+        return ResponseEntity.ok(alunoService.buscarPorId(id));
     }
+
     @PostMapping
     public ResponseEntity<AlunoResponseDTO> criar(@RequestBody AlunoRequestDTO dto) {
-        return ResponseEntity.ok(alunoService.criarAluno(dto));
+        return ResponseEntity.status(201).body(alunoService.criarAluno(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AlunoResponseDTO> atualizarAluno(@PathVariable Integer id, @RequestBody AlunoRequestDTO dto){
-        try {
-            return ResponseEntity.ok(alunoService.atualizar(id,dto));
-        }catch (RuntimeException e){
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<AlunoResponseDTO> atualizarAluno(@PathVariable Integer id,
+                                                           @RequestBody AlunoRequestDTO dto) {
+        return ResponseEntity.ok(alunoService.atualizar(id, dto));
     }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarAluno(@PathVariable Integer id){
+    public ResponseEntity<Void> deletarAluno(@PathVariable Integer id) {
         alunoService.deletar(id);
         return ResponseEntity.noContent().build();
     }
