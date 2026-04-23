@@ -1,7 +1,6 @@
 import { apiRequest } from "./api.js";
 import { limparErros, mostrarErrosCampo } from "./form.js";
 
-// 🔥 Toast
 function showToast(message, type = "success") {
     const toastEl = document.getElementById("toast");
     const messageEl = document.getElementById("toast-message");
