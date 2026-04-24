@@ -4,7 +4,9 @@ import com.example.tablets_chips.dto.AlunoRequestDTO;
 import com.example.tablets_chips.dto.AlunoResponseDTO;
 import com.example.tablets_chips.exception.ResourceNotFoundException;
 import com.example.tablets_chips.model.Aluno;
+import com.example.tablets_chips.model.Tablet;
 import com.example.tablets_chips.repository.AlunoRepository;
+import com.example.tablets_chips.repository.TabletRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,9 +15,11 @@ import java.util.List;
 public class AlunoService {
 
     private final AlunoRepository alunoRepository;
+    private final TabletRepository tabletRepository;
 
-    public AlunoService(AlunoRepository alunoRepository) {
+    public AlunoService(AlunoRepository alunoRepository, TabletRepository tabletRepository) {
         this.alunoRepository = alunoRepository;
+        this.tabletRepository = tabletRepository;
     }
 
     public List<AlunoResponseDTO> listarTodosAlunos() {
@@ -42,6 +46,11 @@ public class AlunoService {
         aluno.setTel2(dto.tel2());
         aluno.setDataNasc(dto.dataNasc());
 
+        Tablet tablet = tabletRepository.findById(dto.tabletId())
+                .orElseThrow(() -> new ResourceNotFoundException("Tablet não encontrado"));
+
+        aluno.setTablet(tablet);
+
         return toDTO(alunoRepository.save(aluno));
     }
 
@@ -55,6 +64,11 @@ public class AlunoService {
         aluno.setTel1(dto.tel1());
         aluno.setTel2(dto.tel2());
         aluno.setDataNasc(dto.dataNasc());
+
+        Tablet tablet = tabletRepository.findById(dto.tabletId())
+                .orElseThrow(() -> new ResourceNotFoundException("Tablet não encontrado"));
+
+        aluno.setTablet(tablet);
 
         return toDTO(alunoRepository.save(aluno));
     }
@@ -74,7 +88,9 @@ public class AlunoService {
                 aluno.getDataNasc(),
                 aluno.getTurma(),
                 aluno.getTel1(),
-                aluno.getTel2()
+                aluno.getTel2(),
+                aluno.getTablet() != null ? aluno.getTablet().getId() : null,
+                aluno.getTablet() != null ? aluno.getTablet().getNs() : null
         );
     }
 }

@@ -9,5 +9,7 @@ public record AlunoResponseDTO(
         LocalDate dataNasc,
         String turma,
         String tel1,
-        String tel2
+        String tel2,
+        Integer tabletId,
+        String tabletNs
 ) {}
