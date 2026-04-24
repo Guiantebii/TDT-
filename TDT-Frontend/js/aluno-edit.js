@@ -70,8 +70,6 @@ async function salvar() {
     btn.innerHTML = "Atualizando...";
 
     const tabletId = document.getElementById("tablet").value;
-
-
     if (!tabletId) {
         showToast("Selecione um tablet", "danger");
         btn.disabled = false;
