@@ -15,7 +15,6 @@ function showToast(message, type = "success") {
     toast.show();
 }
 
-// 🔥 carregar tablets
 async function carregarTablets() {
     try {
         const tablets = await apiRequest("/tablets");
@@ -52,7 +51,6 @@ async function carregarAluno() {
         document.getElementById("tel2").value = aluno.tel2 || "";
         document.getElementById("dataNasc").value = aluno.dataNasc;
 
-        // 🔥 setar tablet atual
         if (aluno.tabletId) {
             document.getElementById("tablet").value = aluno.tabletId;
         }
@@ -73,7 +71,6 @@ async function salvar() {
 
     const tabletId = document.getElementById("tablet").value;
 
-    // 🔥 validação
     if (!tabletId) {
         showToast("Selecione um tablet", "danger");
         btn.disabled = false;
@@ -117,7 +114,6 @@ async function salvar() {
     }
 }
 
-// 🔥 ORDEM IMPORTANTE
 window.onload = async () => {
     await carregarTablets();
     await carregarAluno();

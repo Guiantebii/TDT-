@@ -39,7 +39,6 @@ async function carregar() {
         document.getElementById("dataNasc").textContent =
             data.toLocaleDateString("pt-BR");
 
-        // 🔥 TABLET
         document.getElementById("tabletNs").textContent =
             aluno.tabletNs || "-";
 

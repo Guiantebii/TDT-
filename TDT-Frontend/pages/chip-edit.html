@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Detalhes do Aluno</title>
+    <title>Editar Chip</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
@@ -21,7 +21,7 @@
         <ul class="navbar-nav ms-4">
 
             <li class="nav-item">
-                <a class="nav-link active fw-semibold" href="alunos.html">
+                <a class="nav-link fw-semibold" href="alunos.html">
                     <i class="bi bi-people"></i> Alunos
                 </a>
             </li>
@@ -33,7 +33,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="chips.html">
+                <a class="nav-link active" href="chips.html">
                     <i class="bi bi-sim"></i> Chips
                 </a>
             </li>
@@ -57,93 +57,54 @@
 <div class="container mt-5">
 
     <div class="mb-4">
-        <h2 class="fw-bold">Detalhes do Aluno</h2>
-        <small class="text-muted">Visualização completa do aluno selecionado</small>
+        <h2 class="fw-bold">Editar Chip</h2>
+        <small class="text-muted">Atualize as informações do chip</small>
     </div>
 
     <div class="card shadow-lg p-4">
 
-        <h5 class="mb-3 text-primary">
-            <i class="bi bi-person"></i> Informações Básicas
-        </h5>
+        <div class="row">
 
-        <div class="row mb-4">
             <div class="col-md-6 mb-3">
-                <div class="info-box p-3">
-                    <small class="text-muted">Nome</small>
-                    <div id="nome" class="fw-semibold fs-5"></div>
-                </div>
+                <label class="form-label">ICCID</label>
+                <input id="iccid" class="form-control">
             </div>
 
             <div class="col-md-6 mb-3">
-                <div class="info-box p-3">
-                    <small class="text-muted">EOL</small>
-                    <div id="eol" class="fw-semibold fs-5"></div>
-                </div>
+                <label class="form-label">Status</label>
+                <input id="status" class="form-control">
             </div>
 
             <div class="col-md-6 mb-3">
-                <div class="info-box p-3">
-                    <small class="text-muted">Turma</small>
-                    <div id="turma" class="fw-semibold fs-5"></div>
-                </div>
+                <label class="form-label">PIN</label>
+                <input id="pin" class="form-control">
             </div>
 
             <div class="col-md-6 mb-3">
-                <div class="info-box p-3">
-                    <small class="text-muted">Data de Nascimento</small>
-                    <div id="dataNasc" class="fw-semibold fs-5"></div>
-                </div>
+                <label class="form-label">PIN2</label>
+                <input id="pin2" class="form-control">
             </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">PUK</label>
+                <input id="puk" class="form-control">
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">PUK2</label>
+                <input id="puk2" class="form-control">
+            </div>
+
         </div>
 
-        <hr>
-
-        <h5 class="mb-3 text-primary">
-            <i class="bi bi-tablet"></i> Tablet
-        </h5>
-
-        <div class="row mb-4">
-            <div class="col-md-6 mb-3">
-                <div class="info-box p-3">
-                    <small class="text-muted">Número de Série</small>
-                    <div id="tabletNs" class="fw-semibold fs-5"></div>
-                </div>
-            </div>
-        </div>
-
-        <hr>
-
-        <h5 class="mb-3 text-primary">
-            <i class="bi bi-telephone"></i> Contato
-        </h5>
-
-        <div class="row mb-3">
-            <div class="col-md-6 mb-3">
-                <div class="info-box p-3">
-                    <small class="text-muted">Telefone 1</small>
-                    <div id="tel1" class="fw-semibold fs-5"></div>
-                </div>
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <div class="info-box p-3">
-                    <small class="text-muted">Telefone 2</small>
-                    <div id="tel2" class="fw-semibold fs-5"></div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="d-flex justify-content-end gap-2 mt-4">
+        <div class="d-flex justify-content-end gap-2 mt-3">
             <button class="btn btn-outline-secondary"
-                    onclick="window.location.href='alunos.html'">
-                Voltar
+                    onclick="window.location.href='chips.html'">
+                Cancelar
             </button>
 
-            <button class="btn btn-primary"
-                    onclick="editarAluno()">
-                <i class="bi bi-pencil"></i> Editar
+            <button id="btnSalvar" class="btn btn-warning px-4">
+                <i class="bi bi-check-lg"></i> Atualizar
             </button>
         </div>
 
@@ -166,7 +127,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script type="module" src="../js/aluno-view.js"></script>
+<script type="module" src="../js/chip-edit.js"></script>
 
 </body>
 </html>
