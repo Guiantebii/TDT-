@@ -1,6 +1,9 @@
 import { apiRequest } from "./api.js";
 import { limparErros, mostrarErrosCampo } from "./form.js";
 
+const params = new URLSearchParams(window.location.search);
+const id = params.get("id");
+
 function showToast(message, type = "success") {
     const toastEl = document.getElementById("toast");
     const messageEl = document.getElementById("toast-message");
@@ -11,13 +14,33 @@ function showToast(message, type = "success") {
     new bootstrap.Toast(toastEl).show();
 }
 
+async function carregarTablet() {
+
+    if (!id) {
+        showToast("ID do tablet não informado", "danger");
+        setTimeout(() => window.location.href = "tablets.html", 1500);
+        return;
+    }
+
+    try {
+        const tablet = await apiRequest(`/tablets/${id}`);
+
+        document.getElementById("imei").value = tablet.imei;
+        document.getElementById("ns").value = tablet.ns;
+
+    } catch (error) {
+        showToast(error.message, "danger");
+        setTimeout(() => window.location.href = "tablets.html", 1500);
+    }
+}
+
 async function salvar() {
 
     limparErros();
 
     const btn = document.getElementById("btnSalvar");
     btn.disabled = true;
-    btn.innerHTML = "Salvando...";
+    btn.innerHTML = "Atualizando...";
 
     const tablet = {
         imei: document.getElementById("imei").value,
@@ -25,12 +48,12 @@ async function salvar() {
     };
 
     try {
-        await apiRequest("/tablets", {
-            method: "POST",
+        await apiRequest(`/tablets/${id}`, {
+            method: "PUT",
             body: JSON.stringify(tablet)
         });
 
-        showToast("Tablet criado com sucesso", "success");
+        showToast("Tablet atualizado com sucesso", "success");
 
         setTimeout(() => {
             window.location.href = "tablets.html";
@@ -46,8 +69,9 @@ async function salvar() {
 
     } finally {
         btn.disabled = false;
-        btn.innerHTML = `<i class="bi bi-check-lg"></i> Salvar`;
+        btn.innerHTML = `<i class="bi bi-check-lg"></i> Atualizar`;
     }
 }
 
 document.getElementById("btnSalvar").addEventListener("click", salvar);
+window.onload = carregarTablet;
