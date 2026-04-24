@@ -12,7 +12,6 @@ function showToast(message, type = "success") {
     toast.show();
 }
 
-// 🔥 NOVO: carregar tablets
 async function carregarTablets() {
     try {
         const tablets = await apiRequest("/tablets");
@@ -41,7 +40,7 @@ async function salvar() {
 
     const tabletId = document.getElementById("tablet").value;
 
-    // 🔥 VALIDAÇÃO
+
     if (!tabletId) {
         showToast("Selecione um tablet", "danger");
         btn.disabled = false;
@@ -85,7 +84,6 @@ async function salvar() {
     }
 }
 
-// 🔥 IMPORTANTE: carregar ao abrir
 window.addEventListener("DOMContentLoaded", carregarTablets);
 
 document.getElementById("btnSalvar").addEventListener("click", salvar);
