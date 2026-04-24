@@ -25,16 +25,17 @@ async function salvar() {
     };
 
     try {
-        await apiRequest("/tablets", {
+        const novoTablet = await apiRequest("/tablets", {
             method: "POST",
             body: JSON.stringify(tablet)
         });
 
-        showToast("Tablet criado com sucesso", "success");
+        showToast("Tablet criado! Agora vincule um chip", "success");
 
+        // 🔥 REDIRECIONA JÁ COM ID
         setTimeout(() => {
-            window.location.href = "tablets.html";
-        }, 1500);
+            window.location.href = `tablets.html?vincular=${novoTablet.id}`;
+        }, 1200);
 
     } catch (error) {
 

@@ -19,46 +19,6 @@ public class TabletsChips {
     @Column(name = "tc_id")
     private Integer id;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Tablet getTablet() {
-        return tablet;
-    }
-
-    public void setTablet(Tablet tablet) {
-        this.tablet = tablet;
-    }
-
-    public Chip getChip() {
-        return chip;
-    }
-
-    public void setChip(Chip chip) {
-        this.chip = chip;
-    }
-
-    public List<Devolucao> getDevolucoes() {
-        return devolucoes;
-    }
-
-    public void setDevolucoes(List<Devolucao> devolucoes) {
-        this.devolucoes = devolucoes;
-    }
-
-    public List<Manutencao> getManutencoes() {
-        return manutencoes;
-    }
-
-    public void setManutencoes(List<Manutencao> manutencoes) {
-        this.manutencoes = manutencoes;
-    }
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tab_id")
     private Tablet tablet;

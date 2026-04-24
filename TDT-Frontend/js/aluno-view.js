@@ -39,9 +39,12 @@ async function carregar() {
         document.getElementById("dataNasc").textContent =
             data.toLocaleDateString("pt-BR");
 
+        // 🔥 TABLET
+        document.getElementById("tabletNs").textContent =
+            aluno.tabletNs || "-";
+
     } catch (error) {
 
-        
         document.querySelector(".card").innerHTML = `
             <div class="text-center p-5">
                 <i class="bi bi-exclamation-triangle text-danger fs-1"></i>
@@ -54,6 +57,7 @@ async function carregar() {
                 </button>
             </div>
         `;
+
         showToast(error.message, "danger");
     }
 }
@@ -63,4 +67,5 @@ function editarAluno() {
 }
 
 window.editarAluno = editarAluno;
+
 carregar();

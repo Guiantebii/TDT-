@@ -39,8 +39,8 @@ public class Aluno {
     private String tel2;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "alu_chip_id")
-    private Chip chip;
+    @JoinColumn(name = "tab_id")
+    private Tablet tablet;
 
     @JsonIgnore
     @OneToMany(mappedBy = "aluno")

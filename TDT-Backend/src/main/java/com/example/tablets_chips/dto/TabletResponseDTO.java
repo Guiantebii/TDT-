@@ -4,6 +4,8 @@ public record TabletResponseDTO(
 
         Integer id,
         String imei,
-        String ns
+        String ns,
+        String chipIccid,
+        String chipStatus
 
 ) {}

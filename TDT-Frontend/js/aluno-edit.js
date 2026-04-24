@@ -15,6 +15,25 @@ function showToast(message, type = "success") {
     toast.show();
 }
 
+// 🔥 carregar tablets
+async function carregarTablets() {
+    try {
+        const tablets = await apiRequest("/tablets");
+
+        const select = document.getElementById("tablet");
+
+        tablets.forEach(t => {
+            const option = document.createElement("option");
+            option.value = t.id;
+            option.textContent = `IMEI: ${t.imei} - NS: ${t.ns}`;
+            select.appendChild(option);
+        });
+
+    } catch (error) {
+        showToast("Erro ao carregar tablets", "danger");
+    }
+}
+
 async function carregarAluno() {
 
     if (!id) {
@@ -33,6 +52,11 @@ async function carregarAluno() {
         document.getElementById("tel2").value = aluno.tel2 || "";
         document.getElementById("dataNasc").value = aluno.dataNasc;
 
+        // 🔥 setar tablet atual
+        if (aluno.tabletId) {
+            document.getElementById("tablet").value = aluno.tabletId;
+        }
+
     } catch (error) {
         showToast(error.message, "danger");
         setTimeout(() => window.location.href = "alunos.html", 1500);
@@ -47,13 +71,24 @@ async function salvar() {
     btn.disabled = true;
     btn.innerHTML = "Atualizando...";
 
+    const tabletId = document.getElementById("tablet").value;
+
+    // 🔥 validação
+    if (!tabletId) {
+        showToast("Selecione um tablet", "danger");
+        btn.disabled = false;
+        btn.innerHTML = `<i class="bi bi-check-lg"></i> Atualizar`;
+        return;
+    }
+
     const aluno = {
         nome: document.getElementById("nome").value,
         eol: document.getElementById("eol").value,
         turma: document.getElementById("turma").value,
         tel1: document.getElementById("tel1").value,
         tel2: document.getElementById("tel2").value,
-        dataNasc: document.getElementById("dataNasc").value
+        dataNasc: document.getElementById("dataNasc").value,
+        tabletId: parseInt(tabletId)
     };
 
     try {
@@ -82,5 +117,10 @@ async function salvar() {
     }
 }
 
+// 🔥 ORDEM IMPORTANTE
+window.onload = async () => {
+    await carregarTablets();
+    await carregarAluno();
+};
+
 document.getElementById("btnSalvar").addEventListener("click", salvar);
-window.onload = carregarAluno;

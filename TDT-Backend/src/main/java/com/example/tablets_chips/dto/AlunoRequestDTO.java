@@ -24,5 +24,9 @@ public record AlunoRequestDTO(
         String tel1,
 
         @Pattern(regexp = "^$|\\d{10,11}", message = "Telefone deve conter 10 ou 11 dígitos")
-        String tel2
+        String tel2,
+
+        @NotNull(message = "Tablet é obrigatório")
+        Integer tabletId
+
 ) {}

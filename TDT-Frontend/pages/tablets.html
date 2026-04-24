@@ -27,7 +27,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link active fw-semibold" href="#">
+                <a class="nav-link active fw-semibold" href="tablets.html">
                     <i class="bi bi-tablet"></i> Tablets
                 </a>
             </li>
@@ -80,12 +80,14 @@
                 <tr>
                     <th>IMEI</th>
                     <th>Nº Série</th>
+                    <th>Chip</th>
+                    <th>Status</th>
                     <th>Ações</th>
                 </tr>
                 </thead>
                 <tbody id="tabela-tablets">
                 <tr>
-                    <td colspan="3">Carregando...</td>
+                    <td colspan="5">Carregando...</td>
                 </tr>
                 </tbody>
             </table>
@@ -94,27 +96,40 @@
     </div>
 </div>
 
-<footer class="text-center mt-5 mb-3 text-muted small">
-    © 2026 TDT
-</footer>
+<div class="modal fade" id="modalChip">
+  <div class="modal-dialog">
+    <div class="modal-content">
 
-<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
-    <div id="toast" class="toast align-items-center text-white border-0">
-        <div class="d-flex">
-            <div class="toast-body" id="toast-message"></div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto"
-                    data-bs-dismiss="toast"></button>
-        </div>
+      <div class="modal-header">
+        <h5>Vincular Chip</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <label class="form-label">Selecione o Chip</label>
+        <select id="selectChip" class="form-select"></select>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button class="btn btn-primary" id="btnVincularChip">
+          Vincular
+        </button>
+      </div>
+
     </div>
+  </div>
 </div>
 
-<div class="modal fade" id="modalDelete" tabindex="-1">
+<div class="modal fade" id="modalDelete">
   <div class="modal-dialog">
     <div class="modal-content">
       
       <div class="modal-header">
         <h5 class="modal-title">Confirmar exclusão</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
       </div>
 
       <div class="modal-body">
@@ -129,6 +144,14 @@
     </div>
   </div>
 </div>
+
+<div class="position-fixed bottom-0 end-0 p-3">
+    <div id="toast" class="toast text-white"></div>
+</div>
+
+<footer class="text-center mt-5 mb-3 text-muted small">
+    © 2026 TDT
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script type="module" src="../js/tablets.js"></script>

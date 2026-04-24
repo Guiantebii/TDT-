@@ -1,6 +1,7 @@
 import { apiRequest } from "./api.js";
 
 class TabletManager {
+
     constructor() {
         this.tabela = document.getElementById("tabela-tablets");
         this.busca = document.getElementById("busca");
@@ -8,135 +9,169 @@ class TabletManager {
     }
 
     init() {
-        this.carregarTablets();
-        this.setupEventListeners();
+    this.carregarTablets();
+    this.setupEventListeners();
+
+    const params = new URLSearchParams(window.location.search);
+    const tabletId = params.get("vincular");
+
+    if (tabletId) {
+        this.abrirModalChip(tabletId);
     }
+}
 
     setupEventListeners() {
+
         this.tabela.addEventListener('click', (e) => {
-            const id = e.target.dataset.id;
-            
-            if (e.target.classList.contains('btn-edit')) {
+
+            const btn = e.target.closest("i"); // 🔥 CORREÇÃO PRINCIPAL
+
+            if (!btn) return;
+
+            const id = btn.dataset.id;
+
+            if (!id) return;
+
+            if (btn.classList.contains('btn-edit')) {
                 this.editar(id);
             }
-            
-            if (e.target.classList.contains('btn-delete')) {
+
+            if (btn.classList.contains('btn-delete')) {
                 this.deletar(id);
+            }
+
+            if (btn.classList.contains('btn-chip')) {
+                this.abrirModalChip(id);
             }
         });
 
-
-        this.busca.addEventListener('input', this.debounce(() => {
-            this.filtrarTablets(this.busca.value);
-        }, 300));
-
         document.getElementById("btnConfirmDelete")
             .addEventListener("click", () => this.confirmarExclusao());
-    }
 
-    debounce(func, wait) {
-        let timeout;
-        return (...args) => {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(this, args), wait);
-        };
+        document.getElementById("btnVincularChip")
+            .addEventListener("click", () => this.vincularChip());
     }
 
     async carregarTablets() {
-        this.renderLoading();
+        this.tabela.innerHTML = `<tr><td colspan="5">Carregando...</td></tr>`;
 
         try {
             const tablets = await apiRequest("/tablets");
-            this.tablets = tablets; // Guardar para filtro
-            this.renderTablets(tablets);
+
+            this.tabela.innerHTML = tablets.map(t => `
+                <tr>
+                    <td>${t.imei}</td>
+                    <td>${t.ns}</td>
+                    <td>${t.chipIccid ?? "-"}</td>
+                    <td>${t.chipStatus ?? "-"}</td>
+                    <td>
+                        <i class="bi bi-sim text-success mx-1 btn-chip"
+                           data-id="${t.id}" style="cursor:pointer"></i>
+
+                        <i class="bi bi-pencil text-warning mx-1 btn-edit"
+                           data-id="${t.id}" style="cursor:pointer"></i>
+
+                        <i class="bi bi-trash text-danger mx-1 btn-delete"
+                           data-id="${t.id}" style="cursor:pointer"></i>
+                    </td>
+                </tr>
+            `).join("");
+
         } catch (error) {
-            this.renderError();
-            this.showToast(error.message, "danger");
+            this.tabela.innerHTML = `<tr><td colspan="5">Erro ao carregar</td></tr>`;
+            this.showToast("Erro ao carregar tablets", "danger");
         }
     }
 
-    renderTablets(tablets) {
-        if (tablets.length === 0) {
-            this.tabela.innerHTML = `
-                <tr><td colspan="3">Nenhum tablet encontrado</td></tr>
-            `;
+    async abrirModalChip(id) {
+        this.tabletSelecionado = id;
+
+        const select = document.getElementById("selectChip");
+        select.innerHTML = `<option>Carregando...</option>`;
+
+        try {
+            const chips = await apiRequest("/chips");
+
+            if (chips.length === 0) {
+                select.innerHTML = `<option>Nenhum chip disponível</option>`;
+                return;
+            }
+
+            select.innerHTML = chips.map(c =>
+                `<option value="${c.id}">${c.iccid} - ${c.status}</option>`
+            ).join("");
+
+            new bootstrap.Modal(document.getElementById("modalChip")).show();
+
+        } catch (error) {
+            this.showToast("Erro ao carregar chips", "danger");
+        }
+    }
+
+    async vincularChip() {
+        const chipId = document.getElementById("selectChip").value;
+
+        if (!chipId) {
+            this.showToast("Selecione um chip", "danger");
             return;
         }
 
-        this.tabela.innerHTML = tablets.map(tablet => `
-            <tr>
-                <td>${this.escapeHtml(tablet.imei)}</td>
-                <td>${this.escapeHtml(tablet.ns)}</td>
-                <td>
-                    <i class="bi bi-pencil text-warning mx-1 btn-edit"
-                       style="cursor:pointer"
-                       data-id="${tablet.id}"></i>
+        try {
+            await apiRequest(`/tablets/${this.tabletSelecionado}/vincular-chip`, {
+                method: "POST",
+                body: JSON.stringify({ chipId: parseInt(chipId) })
+            });
 
-                    <i class="bi bi-trash text-danger mx-1 btn-delete"
-                       style="cursor:pointer"
-                       data-id="${tablet.id}"></i>
-                </td>
-            </tr>
-        `).join("");
+            this.showToast("Chip vinculado com sucesso!", "success");
+
+            bootstrap.Modal.getInstance(
+                document.getElementById("modalChip")
+            ).hide();
+
+            this.carregarTablets();
+
+        } catch (error) {
+            this.showToast(error.message || "Erro ao vincular chip", "danger");
+        }
     }
 
-    renderLoading() {
-        this.tabela.innerHTML = `<tr><td colspan="3">Carregando...</td></tr>`;
+    deletar(id) {
+        this.tabletDelete = id;
+        new bootstrap.Modal(document.getElementById("modalDelete")).show();
     }
 
-    renderError() {
-        this.tabela.innerHTML = `<tr><td colspan="3">Erro ao carregar dados</td></tr>`;
-    }
+    async confirmarExclusao() {
+        try {
+            await apiRequest(`/tablets/${this.tabletDelete}`, {
+                method: "DELETE"
+            });
 
-    filtrarTablets(termo) {
-        const filtrados = this.tablets.filter(t => 
-            t.imei.toLowerCase().includes(termo.toLowerCase())
-        );
-        this.renderTablets(filtrados);
-    }
+            this.showToast("Tablet deletado com sucesso", "success");
+            this.carregarTablets();
 
-    escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
+        } catch (error) {
+            this.showToast(error.message, "danger");
+        }
+
+        bootstrap.Modal.getInstance(
+            document.getElementById("modalDelete")
+        ).hide();
     }
 
     editar(id) {
         window.location.href = `tablet-edit.html?id=${id}`;
     }
 
-    deletar(id) {
-        this.tabletIdParaDeletar = id;
-        const modal = new bootstrap.Modal(document.getElementById("modalDelete"));
-        modal.show();
-    }
+    showToast(msg, type = "success") {
+        const el = document.getElementById("toast");
 
-    async confirmarExclusao() {
-        try {
-            await apiRequest(`/tablets/${this.tabletIdParaDeletar}`, {
-                method: "DELETE"
-            });
+        el.className = `toast show bg-${type}`;
+        el.textContent = msg;
 
-            this.showToast("Tablet deletado com sucesso", "success");
-            this.carregarTablets();
-        } catch (error) {
-            this.showToast(error.message, "danger");
-        }
-
-        bootstrap.Modal.getInstance(document.getElementById("modalDelete")).hide();
-    }
-
-    showToast(message, type = "success") {
-        const toastEl = document.getElementById("toast");
-        const messageEl = document.getElementById("toast-message");
-
-        messageEl.textContent = message;
-        toastEl.className = `toast align-items-center text-white bg-${type} border-0`;
-
-        new bootstrap.Toast(toastEl).show();
+        setTimeout(() => {
+            el.classList.remove("show");
+        }, 3000);
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    new TabletManager();
-});
+document.addEventListener("DOMContentLoaded", () => new TabletManager());

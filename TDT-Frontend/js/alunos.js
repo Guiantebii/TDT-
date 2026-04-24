@@ -7,7 +7,6 @@ function showToast(message, type = "success") {
     const messageEl = document.getElementById("toast-message");
 
     messageEl.textContent = message;
-
     toastEl.className = `toast align-items-center text-white bg-${type} border-0`;
 
     const toast = new bootstrap.Toast(toastEl);
@@ -19,7 +18,7 @@ async function carregarAlunos() {
 
     tabela.innerHTML = `
         <tr>
-            <td colspan="4">Carregando...</td>
+            <td colspan="5">Carregando...</td>
         </tr>
     `;
 
@@ -29,7 +28,7 @@ async function carregarAlunos() {
         if (alunos.length === 0) {
             tabela.innerHTML = `
                 <tr>
-                    <td colspan="4">Nenhum aluno encontrado</td>
+                    <td colspan="5">Nenhum aluno encontrado</td>
                 </tr>
             `;
             return;
@@ -40,6 +39,7 @@ async function carregarAlunos() {
                 <td>${aluno.nome}</td>
                 <td>${aluno.eol}</td>
                 <td>${aluno.turma}</td>
+                <td>${aluno.tabletNs ?? "-"}</td>
                 <td>
                     <i class="bi bi-eye text-primary mx-1"
                        style="cursor:pointer"
@@ -59,7 +59,7 @@ async function carregarAlunos() {
     } catch (error) {
         tabela.innerHTML = `
             <tr>
-                <td colspan="4">Erro ao carregar dados</td>
+                <td colspan="5">Erro ao carregar dados</td>
             </tr>
         `;
         showToast(error.message, "danger");
@@ -82,7 +82,6 @@ function deletar(id) {
 }
 
 document.getElementById("btnConfirmDelete").addEventListener("click", async () => {
-
     try {
         await apiRequest(`/alunos/${alunoIdParaDeletar}`, {
             method: "DELETE"
