@@ -29,7 +29,4 @@ public class Tablet {
     @OneToMany(mappedBy = "tablet")
     private List<TabletsChips> tabletsChips;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "tablet")
-    private List<Manutencao> manutencoes;
 }

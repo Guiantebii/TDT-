@@ -22,8 +22,4 @@ public class Manutencao {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tc_id")
     private TabletsChips tabletsChips;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tab_id")
-    private Tablet tablet;
 }

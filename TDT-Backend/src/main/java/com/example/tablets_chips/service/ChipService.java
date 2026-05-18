@@ -70,7 +70,11 @@ public class ChipService {
         return new ChipResponseDTO(
                 chip.getId(),
                 chip.getIccid(),
-                chip.getStatus()
+                chip.getStatus(),
+                chip.getPin(),
+                chip.getPin2(),
+                chip.getPuk(),
+                chip.getPuk2()
         );
     }
 }

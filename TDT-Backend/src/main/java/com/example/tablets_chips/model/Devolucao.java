@@ -19,8 +19,8 @@ public class Devolucao {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tc_id")
-    private TabletsChips tabletsChips;
+    @JoinColumn(name = "tab_id")
+    private Tablet tablet;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "alu_id")
