@@ -29,9 +29,5 @@ public class TabletsChips {
 
     @JsonIgnore
     @OneToMany(mappedBy = "tabletsChips")
-    private List<Devolucao> devolucoes;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "tabletsChips")
     private List<Manutencao> manutencoes;
 }
