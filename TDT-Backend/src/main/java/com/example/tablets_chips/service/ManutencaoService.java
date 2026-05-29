@@ -46,7 +46,7 @@ public class ManutencaoService {
     public ManutencaoResponseDTO atualizarManutencao(ManutencaoRequestDTO dto, Integer id){
         Manutencao manutencao = manutencaoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Manutencao nao encontrada"));
 
-        TabletsChips tabletsChips = tabletsChipsRepository.findById(id).orElseThrow(() -> new  ResourceNotFoundException("Tablets e chips nao encontrados"));
+        TabletsChips tabletsChips = tabletsChipsRepository.findById(dto.tc_id()).orElseThrow(() -> new  ResourceNotFoundException("Tablets e chips nao encontrados"));
         manutencao.setTabletsChips(tabletsChips);
         manutencao.setDescricao(dto.descricao());
 

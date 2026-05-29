@@ -1,6 +1,7 @@
 import { apiRequest } from "./api.js";
 
 let chipIdParaDeletar = null;
+let todosChips = [];
 
 function showToast(message, type = "success") {
     const toastEl = document.getElementById("toast");
@@ -22,37 +23,8 @@ async function carregarChips() {
     `;
 
     try {
-        const chips = await apiRequest("/chips");
-
-        if (chips.length === 0) {
-            tabela.innerHTML = `
-                <tr>
-                    <td colspan="3">Nenhum chip encontrado</td>
-                </tr>
-            `;
-            return;
-        }
-
-        tabela.innerHTML = chips.map(chip => `
-            <tr>
-                <td>${chip.iccid}</td>
-                <td>${chip.status}</td>
-                <td>
-                    <i class="bi bi-eye text-primary mx-1"
-                       style="cursor:pointer"
-                       onclick="visualizar(${chip.id})"></i>
-
-                    <i class="bi bi-pencil text-warning mx-1"
-                       style="cursor:pointer"
-                       onclick="editar(${chip.id})"></i>
-
-                    <i class="bi bi-trash text-danger mx-1"
-                       style="cursor:pointer"
-                       onclick="deletar(${chip.id})"></i>
-                </td>
-            </tr>
-        `).join("");
-
+        todosChips = await apiRequest("/chips");
+        renderizarTabela(todosChips);
     } catch (error) {
         tabela.innerHTML = `
             <tr>
@@ -61,6 +33,50 @@ async function carregarChips() {
         `;
         showToast(error.message, "danger");
     }
+}
+
+function renderizarTabela(lista) {
+    const tabela = document.getElementById("tabela-chips");
+
+    if (lista.length === 0) {
+        tabela.innerHTML = `
+            <tr>
+                <td colspan="3">Nenhum chip encontrado</td>
+            </tr>
+        `;
+        return;
+    }
+
+    tabela.innerHTML = lista.map(chip => `
+        <tr>
+            <td>${chip.iccid}</td>
+            <td>${chip.status}</td>
+            <td>
+                <i class="bi bi-eye text-primary mx-1"
+                   style="cursor:pointer"
+                   onclick="visualizar(${chip.id})"></i>
+
+                <i class="bi bi-pencil text-warning mx-1"
+                   style="cursor:pointer"
+                   onclick="editar(${chip.id})"></i>
+
+                <i class="bi bi-trash text-danger mx-1"
+                   style="cursor:pointer"
+                   onclick="deletar(${chip.id})"></i>
+            </td>
+        </tr>
+    `).join("");
+}
+
+function filtrarChips(termo) {
+    const termoBusca = termo.toLowerCase().trim();
+    
+    const filtrados = todosChips.filter(c => 
+        (c.iccid && c.iccid.toLowerCase().includes(termoBusca)) || 
+        (c.status && c.status.toLowerCase().includes(termoBusca))
+    );
+
+    renderizarTabela(filtrados);
 }
 
 function visualizar(id) {
@@ -79,7 +95,6 @@ function deletar(id) {
 }
 
 document.getElementById("btnConfirmDelete").addEventListener("click", async () => {
-
     try {
         await apiRequest(`/chips/${chipIdParaDeletar}`, {
             method: "DELETE"
@@ -100,4 +115,11 @@ window.visualizar = visualizar;
 window.editar = editar;
 window.deletar = deletar;
 
-window.onload = carregarChips;
+document.addEventListener("DOMContentLoaded", () => {
+    carregarChips();
+    
+    const inputBusca = document.getElementById("busca");
+    if (inputBusca) {
+        inputBusca.addEventListener("input", (e) => filtrarChips(e.target.value));
+    }
+});

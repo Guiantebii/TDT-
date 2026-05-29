@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Novo Aluno</title>
+    <title>Editar Devolução</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
@@ -21,7 +21,7 @@
         <ul class="navbar-nav ms-4">
 
             <li class="nav-item">
-                <a class="nav-link active fw-semibold" href="alunos.html">
+                <a class="nav-link fw-semibold" href="alunos.html">
                     <i class="bi bi-people"></i> Alunos
                 </a>
             </li>
@@ -39,7 +39,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="devolucoes.html">
+                <a class="nav-link active fw-semibold" href="devolucoes.html">
                     <i class="bi bi-arrow-left-right"></i> Devolução
                 </a>
             </li>
@@ -55,91 +55,51 @@
 </nav>
 
 <div class="container mt-5">
-
     <div class="mb-4">
-        <h2 class="fw-bold">Novo Aluno</h2>
-        <small class="text-muted">Preencha os dados para cadastrar um aluno</small>
+        <h2 class="fw-bold">Editar Devolução</h2>
+        <small class="text-muted">Atualize as informações do vínculo</small>
     </div>
 
     <div class="card shadow-lg p-4">
-
         <div class="row">
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Nome</label>
-                <input id="nome" class="form-control">
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">EOL</label>
-                <input id="eol" class="form-control">
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Turma</label>
-                <input id="turma" class="form-control">
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Data de Nascimento</label>
-                <input id="dataNasc" type="date" class="form-control">
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Telefone 1</label>
-                <input id="tel1" class="form-control">
-            </div>
-
-            <div class="col-md-6 mb-3">
-                <label class="form-label">Telefone 2</label>
-                <input id="tel2" class="form-control">
-            </div>
-
             <div class="col-md-6 mb-3">
                 <label class="form-label">Tablet</label>
-                <div class="dropdown">
-                    <button class="form-select text-start" type="button" id="comboTablet" data-bs-toggle="dropdown" aria-expanded="false">
-                        Selecione um tablet
-                    </button>
-                    <ul class="dropdown-menu w-100 p-2">
-                        <li><input type="text" id="buscaTablet" class="form-control mb-2" placeholder="Pesquisar por IMEI ou NS..."></li>
-                        <div id="itensTablet" style="max-height: 200px; overflow-y: auto;"></div>
-                    </ul>
-                </div>
-                <input type="hidden" id="tablet" value="">
+                <select id="tab_id" class="form-select"></select>
             </div>
 
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Aluno</label>
+                <select id="alu_id" class="form-select"></select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Data de Entrega</label>
+                <input type="date" id="dataEntrega" class="form-control">
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Data de Devolução</label>
+                <input type="date" id="dataDevolucao" class="form-control">
+            </div>
         </div>
 
         <div class="d-flex justify-content-end gap-2 mt-3">
-            <button class="btn btn-outline-secondary"
-                    onclick="window.location.href='alunos.html'">
-                Cancelar
-            </button>
-
-            <button id="btnSalvar" class="btn btn-primary px-4">
-                <i class="bi bi-check-lg"></i> Salvar
-            </button>
+            <button class="btn btn-outline-secondary" onclick="window.location.href='devolucoes.html'">Cancelar</button>
+            <button id="btnSalvar" class="btn btn-warning px-4"><i class="bi bi-check-lg"></i> Atualizar</button>
         </div>
-
     </div>
 </div>
-
-<footer class="text-center mt-5 mb-3 text-muted small">
-    © 2026 TDT
-</footer>
 
 <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
     <div id="toast" class="toast align-items-center text-white border-0">
         <div class="d-flex">
             <div class="toast-body" id="toast-message"></div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto"
-                    data-bs-dismiss="toast"></button>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
         </div>
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script type="module" src="../js/aluno-create.js"></script>
+<script type="module" src="../js/devolucao-edit.js"></script>
 </body>
 </html>

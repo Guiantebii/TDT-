@@ -72,7 +72,7 @@ public class DevolucaoService {
     }
     public void deletarDevolucao(Integer id){
         if(!devolucaoRepository.existsById(id)){
-            throw new ResourceNotFoundException("Aluno não encontrado");
+            throw new ResourceNotFoundException("Devolução não encontrado");
         }
         devolucaoRepository.deleteById(id);
     }

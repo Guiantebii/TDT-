@@ -1,6 +1,7 @@
 import { apiRequest } from "./api.js";
 
 let alunoIdParaDeletar = null;
+let todosAlunos = [];
 
 function showToast(message, type = "success") {
     const toastEl = document.getElementById("toast");
@@ -23,39 +24,8 @@ async function carregarAlunos() {
     `;
 
     try {
-        const alunos = await apiRequest("/alunos");
-
-        if (alunos.length === 0) {
-            tabela.innerHTML = `
-                <tr>
-                    <td colspan="5">Nenhum aluno encontrado</td>
-                </tr>
-            `;
-            return;
-        }
-
-        tabela.innerHTML = alunos.map(aluno => `
-            <tr>
-                <td>${aluno.nome}</td>
-                <td>${aluno.eol}</td>
-                <td>${aluno.turma}</td>
-                <td>${aluno.tabletNs ?? "-"}</td>
-                <td>
-                    <i class="bi bi-eye text-primary mx-1"
-                       style="cursor:pointer"
-                       onclick="visualizar(${aluno.id})"></i>
-
-                    <i class="bi bi-pencil text-warning mx-1"
-                       style="cursor:pointer"
-                       onclick="editar(${aluno.id})"></i>
-
-                    <i class="bi bi-trash text-danger mx-1"
-                       style="cursor:pointer"
-                       onclick="deletar(${aluno.id})"></i>
-                </td>
-            </tr>
-        `).join("");
-
+        todosAlunos = await apiRequest("/alunos");
+        renderizarTabela(todosAlunos);
     } catch (error) {
         tabela.innerHTML = `
             <tr>
@@ -64,6 +34,53 @@ async function carregarAlunos() {
         `;
         showToast(error.message, "danger");
     }
+}
+
+function renderizarTabela(lista) {
+    const tabela = document.getElementById("tabela-alunos");
+
+    if (lista.length === 0) {
+        tabela.innerHTML = `
+            <tr>
+                <td colspan="5">Nenhum aluno encontrado</td>
+            </tr>
+        `;
+        return;
+    }
+
+    tabela.innerHTML = lista.map(aluno => `
+        <tr>
+            <td>${aluno.nome}</td>
+            <td>${aluno.eol}</td>
+            <td>${aluno.turma}</td>
+            <td>${aluno.tabletNs ?? "-"}</td>
+            <td>
+                <i class="bi bi-eye text-primary mx-1"
+                   style="cursor:pointer"
+                   onclick="visualizar(${aluno.id})"></i>
+
+                <i class="bi bi-pencil text-warning mx-1"
+                   style="cursor:pointer"
+                   onclick="editar(${aluno.id})"></i>
+
+                <i class="bi bi-trash text-danger mx-1"
+                   style="cursor:pointer"
+                   onclick="deletar(${aluno.id})"></i>
+            </td>
+        </tr>
+    `).join("");
+}
+
+function filtrarAlunos(termo) {
+    const termoBusca = termo.toLowerCase().trim();
+    
+    const filtrados = todosAlunos.filter(a => 
+        (a.nome && a.nome.toLowerCase().includes(termoBusca)) || 
+        (a.eol && a.eol.toLowerCase().includes(termoBusca)) ||
+        (a.turma && a.turma.toLowerCase().includes(termoBusca))
+    );
+
+    renderizarTabela(filtrados);
 }
 
 function visualizar(id) {
@@ -102,4 +119,11 @@ window.visualizar = visualizar;
 window.editar = editar;
 window.deletar = deletar;
 
-window.onload = carregarAlunos;
+document.addEventListener("DOMContentLoaded", () => {
+    carregarAlunos();
+    
+    const inputBusca = document.getElementById("busca");
+    if (inputBusca) {
+        inputBusca.addEventListener("input", (e) => filtrarAlunos(e.target.value));
+    }
+});

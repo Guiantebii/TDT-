@@ -35,8 +35,8 @@ public class ManutencaoController {
         return ResponseEntity.ok(manutencaoService.atualizarManutencao(dto,id));
     }
     @DeleteMapping("{id}")
-    public void deletarManutencao(@PathVariable Integer id){
+    public ResponseEntity<Void> deletarManutencao(@PathVariable Integer id){
         manutencaoService.deletarManutencao(id);
-        ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().build();
     }
 }

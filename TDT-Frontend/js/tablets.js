@@ -5,26 +5,27 @@ class TabletManager {
     constructor() {
         this.tabela = document.getElementById("tabela-tablets");
         this.busca = document.getElementById("busca");
+        this.todosTablets = []; 
         this.init();
     }
 
     init() {
-    this.carregarTablets();
-    this.setupEventListeners();
+        this.carregarTablets();
+        this.setupEventListeners();
 
-    const params = new URLSearchParams(window.location.search);
-    const tabletId = params.get("vincular");
+        const params = new URLSearchParams(window.location.search);
+        const tabletId = params.get("vincular");
 
-    if (tabletId) {
-        this.abrirModalChip(tabletId);
+        if (tabletId) {
+            this.abrirModalChip(tabletId);
+        }
     }
-}
 
     setupEventListeners() {
 
         this.tabela.addEventListener('click', (e) => {
 
-            const btn = e.target.closest("i"); // 🔥 CORREÇÃO PRINCIPAL
+            const btn = e.target.closest("i"); 
 
             if (!btn) return;
 
@@ -50,37 +51,64 @@ class TabletManager {
 
         document.getElementById("btnVincularChip")
             .addEventListener("click", () => this.vincularChip());
+
+    
+        this.busca.addEventListener("input", (e) => this.filtrarTablets(e.target.value));
     }
 
     async carregarTablets() {
         this.tabela.innerHTML = `<tr><td colspan="5">Carregando...</td></tr>`;
 
         try {
-            const tablets = await apiRequest("/tablets");
+    
+            this.todosTablets = await apiRequest("/tablets");
+            
 
-            this.tabela.innerHTML = tablets.map(t => `
-                <tr>
-                    <td>${t.imei}</td>
-                    <td>${t.ns}</td>
-                    <td>${t.chipIccid ?? "-"}</td>
-                    <td>${t.chipStatus ?? "-"}</td>
-                    <td>
-                        <i class="bi bi-sim text-success mx-1 btn-chip"
-                           data-id="${t.id}" style="cursor:pointer"></i>
-
-                        <i class="bi bi-pencil text-warning mx-1 btn-edit"
-                           data-id="${t.id}" style="cursor:pointer"></i>
-
-                        <i class="bi bi-trash text-danger mx-1 btn-delete"
-                           data-id="${t.id}" style="cursor:pointer"></i>
-                    </td>
-                </tr>
-            `).join("");
+            this.renderizarTabela(this.todosTablets);
 
         } catch (error) {
             this.tabela.innerHTML = `<tr><td colspan="5">Erro ao carregar</td></tr>`;
             this.showToast("Erro ao carregar tablets", "danger");
         }
+    }
+
+
+    renderizarTabela(lista) {
+        if (lista.length === 0) {
+            this.tabela.innerHTML = `<tr><td colspan="5" class="text-muted">Nenhum tablet encontrado.</td></tr>`;
+            return;
+        }
+
+        this.tabela.innerHTML = lista.map(t => `
+            <tr>
+                <td>${t.imei}</td>
+                <td>${t.ns}</td>
+                <td>${t.chipIccid ?? "-"}</td>
+                <td>${t.chipStatus ?? "-"}</td>
+                <td>
+                    <i class="bi bi-sim text-success mx-1 btn-chip"
+                       data-id="${t.id}" style="cursor:pointer" title="Vincular Chip"></i>
+
+                    <i class="bi bi-pencil text-warning mx-1 btn-edit"
+                       data-id="${t.id}" style="cursor:pointer" title="Editar"></i>
+
+                    <i class="bi bi-trash text-danger mx-1 btn-delete"
+                       data-id="${t.id}" style="cursor:pointer" title="Excluir"></i>
+                </td>
+            </tr>
+        `).join("");
+    }
+
+
+    filtrarTablets(termo) {
+        const termoBusca = termo.toLowerCase().trim();
+        
+        const filtrados = this.todosTablets.filter(t => 
+            (t.imei && t.imei.toLowerCase().includes(termoBusca)) || 
+            (t.ns && t.ns.toLowerCase().includes(termoBusca))
+        );
+
+        this.renderizarTabela(filtrados);
     }
 
     async abrirModalChip(id) {
