@@ -1,6 +1,8 @@
 import { apiRequest } from "./api.js";
 import { limparErros, mostrarErrosCampo } from "./form.js";
 
+let todosTablets = [];
+
 function showToast(message, type = "success") {
     const toastEl = document.getElementById("toast");
     const messageEl = document.getElementById("toast-message");
@@ -14,24 +16,47 @@ function showToast(message, type = "success") {
 
 async function carregarTablets() {
     try {
-        const tablets = await apiRequest("/tablets");
-
-        const select = document.getElementById("tablet");
-
-        tablets.forEach(t => {
-            const option = document.createElement("option");
-            option.value = t.id;
-            option.textContent = `IMEI: ${t.imei} - NS: ${t.ns}`;
-            select.appendChild(option);
-        });
-
+        todosTablets = await apiRequest("/tablets");
+        renderizarListaTablets(todosTablets);
     } catch (error) {
         showToast("Erro ao carregar tablets", "danger");
     }
 }
 
-async function salvar() {
+function renderizarListaTablets(lista) {
+    const container = document.getElementById("itensTablet");
+    container.innerHTML = "";
 
+    if (lista.length === 0) {
+        container.innerHTML = '<li class="dropdown-item text-muted small">Nenhum tablet encontrado</li>';
+        return;
+    }
+
+    lista.forEach(t => {
+        const li = document.createElement("li");
+        li.className = "dropdown-item";
+        li.style.cursor = "pointer";
+        li.textContent = `IMEI: ${t.imei} - NS: ${t.ns}`;
+        li.addEventListener("click", () => selecionarTablet(t.id, `IMEI: ${t.imei} - NS: ${t.ns}`));
+        container.appendChild(li);
+    });
+}
+
+function filtrarTablets(termo) {
+    const termoBusca = termo.toLowerCase().trim();
+    const filtrados = todosTablets.filter(t =>
+        (t.imei && t.imei.toLowerCase().includes(termoBusca)) ||
+        (t.ns && t.ns.toLowerCase().includes(termoBusca))
+    );
+    renderizarListaTablets(filtrados);
+}
+
+function selecionarTablet(id, texto) {
+    document.getElementById("tablet").value = id;
+    document.getElementById("comboTablet").textContent = texto;
+}
+
+async function salvar() {
     limparErros();
 
     const btn = document.getElementById("btnSalvar");
@@ -70,19 +95,25 @@ async function salvar() {
         }, 1500);
 
     } catch (error) {
-
         if (error.validation) {
             mostrarErrosCampo(error.validation);
         } else {
             showToast(error.message, "danger");
         }
-
     } finally {
         btn.disabled = false;
         btn.innerHTML = `<i class="bi bi-check-lg"></i> Salvar`;
     }
 }
 
-window.addEventListener("DOMContentLoaded", carregarTablets);
+window.addEventListener("DOMContentLoaded", () => {
+    carregarTablets();
+    
+    const inputBusca = document.getElementById("buscaTablet");
+    if (inputBusca) {
+        inputBusca.addEventListener("input", (e) => filtrarTablets(e.target.value));
+        inputBusca.addEventListener("click", (e) => e.stopPropagation());
+    }
+});
 
 document.getElementById("btnSalvar").addEventListener("click", salvar);
