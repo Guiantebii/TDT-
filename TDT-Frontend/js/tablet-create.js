@@ -32,9 +32,9 @@ async function salvar() {
 
         showToast("Tablet criado! Agora vincule um chip", "success");
 
-        // 🔥 REDIRECIONA JÁ COM ID
+    
         setTimeout(() => {
-            window.location.href = `tablets.html?vincular=${novoTablet.id}`;
+           window.location.href = `tablet-edit.html?id=${novoTablet.id}&vincular=true`;
         }, 1200);
 
     } catch (error) {

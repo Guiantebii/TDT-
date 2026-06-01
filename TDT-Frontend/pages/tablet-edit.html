@@ -80,7 +80,7 @@
 
         <hr>
 
-        <!-- CHIP ATUAL -->
+     
         <h5 class="text-primary mb-3">
             <i class="bi bi-sim"></i> Chip Atual
         </h5>
@@ -122,7 +122,6 @@
 
 </div>
 
-<!-- MODAL CHIP -->
 <div class="modal fade" id="modalChip">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -133,7 +132,12 @@
       </div>
 
       <div class="modal-body">
-        <select id="selectChip" class="form-select"></select>
+        <div class="input-group mb-3">
+            <span class="input-group-text"><i class="bi bi-search"></i></span>
+            <input type="text" id="buscaChip" class="form-control" placeholder="Digite o ICCID para buscar...">
+        </div>
+        
+        <select id="selectChip" class="form-select" size="5"></select>
       </div>
 
       <div class="modal-footer">

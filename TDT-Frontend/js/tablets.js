@@ -6,6 +6,7 @@ class TabletManager {
         this.tabela = document.getElementById("tabela-tablets");
         this.busca = document.getElementById("busca");
         this.todosTablets = []; 
+        this.todosChips = [];
         this.init();
     }
 
@@ -52,18 +53,25 @@ class TabletManager {
         document.getElementById("btnVincularChip")
             .addEventListener("click", () => this.vincularChip());
 
-    
         this.busca.addEventListener("input", (e) => this.filtrarTablets(e.target.value));
+
+     
+        document.getElementById("buscaChip").addEventListener("input", (e) => {
+            const termoBusca = e.target.value.toLowerCase().trim();
+            
+            const filtrados = this.todosChips.filter(c => 
+                c.iccid && c.iccid.toLowerCase().includes(termoBusca)
+            );
+
+            this.renderizarChips(filtrados);
+        });
     }
 
     async carregarTablets() {
         this.tabela.innerHTML = `<tr><td colspan="5">Carregando...</td></tr>`;
 
         try {
-    
             this.todosTablets = await apiRequest("/tablets");
-            
-
             this.renderizarTabela(this.todosTablets);
 
         } catch (error) {
@@ -71,7 +79,6 @@ class TabletManager {
             this.showToast("Erro ao carregar tablets", "danger");
         }
     }
-
 
     renderizarTabela(lista) {
         if (lista.length === 0) {
@@ -99,7 +106,6 @@ class TabletManager {
         `).join("");
     }
 
-
     filtrarTablets(termo) {
         const termoBusca = termo.toLowerCase().trim();
         
@@ -111,23 +117,37 @@ class TabletManager {
         this.renderizarTabela(filtrados);
     }
 
+    renderizarChips(lista) {
+        const select = document.getElementById("selectChip");
+
+        if (lista.length === 0) {
+            select.innerHTML = `<option value="" disabled selected>Nenhum chip encontrado...</option>`;
+            return;
+        }
+
+        select.innerHTML = lista.map(c =>
+            `<option value="${c.id}">${c.iccid} - ${c.status}</option>`
+        ).join("");
+    }
+
     async abrirModalChip(id) {
         this.tabletSelecionado = id;
 
         const select = document.getElementById("selectChip");
+        const inputBusca = document.getElementById("buscaChip");
+
         select.innerHTML = `<option>Carregando...</option>`;
+        inputBusca.value = ""; 
 
         try {
-            const chips = await apiRequest("/chips");
+            this.todosChips = await apiRequest("/chips"); 
 
-            if (chips.length === 0) {
-                select.innerHTML = `<option>Nenhum chip disponível</option>`;
+            if (this.todosChips.length === 0) {
+                select.innerHTML = `<option value="" disabled>Nenhum chip disponível</option>`;
                 return;
             }
 
-            select.innerHTML = chips.map(c =>
-                `<option value="${c.id}">${c.iccid} - ${c.status}</option>`
-            ).join("");
+            this.renderizarChips(this.todosChips); 
 
             new bootstrap.Modal(document.getElementById("modalChip")).show();
 
@@ -140,7 +160,7 @@ class TabletManager {
         const chipId = document.getElementById("selectChip").value;
 
         if (!chipId) {
-            this.showToast("Selecione um chip", "danger");
+            this.showToast("Selecione um chip válido", "danger");
             return;
         }
 

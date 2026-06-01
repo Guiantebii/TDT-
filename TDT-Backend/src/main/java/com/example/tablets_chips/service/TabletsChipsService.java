@@ -3,7 +3,6 @@ package com.example.tablets_chips.service;
 import com.example.tablets_chips.dto.TabletsChipsResponseDto;
 import com.example.tablets_chips.repository.TabletsChipsRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

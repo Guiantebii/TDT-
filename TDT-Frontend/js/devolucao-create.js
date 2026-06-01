@@ -13,7 +13,7 @@ function showToast(message, type = "success") {
 async function carregarSelects() {
     try {
         const tablets = await apiRequest("/tablets");
-        const alunos = await apiRequest("/alunos"); // Presumindo que você tenha essa rota!
+        const alunos = await apiRequest("/alunos");
 
         const selectTab = document.getElementById("tab_id");
         selectTab.innerHTML = `<option value="">Selecione um Tablet</option>` + 

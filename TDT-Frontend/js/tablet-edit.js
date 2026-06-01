@@ -5,6 +5,7 @@ const params = new URLSearchParams(window.location.search);
 const id = params.get("id");
 
 let modalChip;
+let todosOsChips = []; 
 
 function showToast(message, type = "success") {
     const el = document.getElementById("toast");
@@ -76,19 +77,29 @@ async function salvar() {
         btn.innerHTML = "Atualizar";
     }
 }
+function renderizarChips(chipsFiltrados) {
+    const select = document.getElementById("selectChip");
+    
+    if (chipsFiltrados.length === 0) {
+        select.innerHTML = `<option value="" disabled selected>Nenhum chip encontrado...</option>`;
+        return;
+    }
+
+    select.innerHTML = chipsFiltrados.map(c =>
+        `<option value="${c.id}">${c.iccid} - ${c.status}</option>`
+    ).join("");
+}
 
 async function abrirModalChip() {
-
     const select = document.getElementById("selectChip");
+    const inputBusca = document.getElementById("buscaChip");
+    
     select.innerHTML = "Carregando...";
+    inputBusca.value = ""; 
 
     try {
-        const chips = await apiRequest("/chips");
-
-        select.innerHTML = chips.map(c =>
-            `<option value="${c.id}">${c.iccid} - ${c.status}</option>`
-        ).join("");
-
+        todosOsChips = await apiRequest("/chips"); 
+        renderizarChips(todosOsChips); 
         modalChip.show();
 
     } catch {
@@ -99,6 +110,11 @@ async function abrirModalChip() {
 async function vincularChip() {
 
     const chipId = document.getElementById("selectChip").value;
+
+    if (!chipId) {
+        showToast("Por favor, selecione um chip válido", "warning");
+        return;
+    }
 
     try {
         await apiRequest(`/tablets/${id}/vincular-chip`, {
@@ -111,10 +127,20 @@ async function vincularChip() {
 
         carregarTablet();
 
-    } catch {
-        showToast("Erro ao trocar chip", "danger");
+    } catch (error) {
+        showToast(error.message || "Erro ao trocar chip", "danger");
     }
 }
+
+document.getElementById("buscaChip").addEventListener("input", (evento) => {
+    const textoDigitado = evento.target.value.toLowerCase();
+    
+    const resultadoFiltro = todosOsChips.filter(chip => 
+        chip.iccid.toLowerCase().includes(textoDigitado)
+    );
+
+    renderizarChips(resultadoFiltro);
+});
 
 document.getElementById("btnSalvar").addEventListener("click", salvar);
 document.getElementById("btnTrocarChip").addEventListener("click", abrirModalChip);
@@ -123,4 +149,10 @@ document.getElementById("btnVincularChip").addEventListener("click", vincularChi
 document.addEventListener("DOMContentLoaded", () => {
     modalChip = new bootstrap.Modal(document.getElementById("modalChip"));
     carregarTablet();
+
+    if (params.get("vincular") === "true") {
+        setTimeout(() => {
+            abrirModalChip();
+        }, 500);
+    }
 });

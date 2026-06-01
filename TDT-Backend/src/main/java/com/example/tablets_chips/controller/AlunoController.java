@@ -43,7 +43,7 @@ public class AlunoController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarAluno(@PathVariable Integer id) {
-        alunoService.deletar(id);
+        alunoService.deletarAluno(id);
         return ResponseEntity.noContent().build();
     }
 }

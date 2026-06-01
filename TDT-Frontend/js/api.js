@@ -9,13 +9,20 @@ export async function apiRequest(endpoint, options = {}) {
         ...options
     });
 
-    if (!res.ok) {
-        const error = await res.json();
 
+    if (!res.ok) {
+        let error;
+        try {
+            error = await res.json();
+        } catch (e) {
+     
+            throw new Error(`Erro no servidor (Status: ${res.status}).`);
+        }
+
+   
         if (!error.message) {
             throw { validation: error };
         }
-
 
         throw new Error(error.message || "Erro na requisição");
     }
