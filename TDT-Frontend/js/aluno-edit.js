@@ -70,13 +70,7 @@ async function salvar() {
     btn.innerHTML = "Atualizando...";
 
     const tabletId = document.getElementById("tablet").value;
-    if (!tabletId) {
-        showToast("Selecione um tablet", "danger");
-        btn.disabled = false;
-        btn.innerHTML = `<i class="bi bi-check-lg"></i> Atualizar`;
-        return;
-    }
-
+   
     const aluno = {
         nome: document.getElementById("nome").value,
         eol: document.getElementById("eol").value,
@@ -84,7 +78,7 @@ async function salvar() {
         tel1: document.getElementById("tel1").value,
         tel2: document.getElementById("tel2").value,
         dataNasc: document.getElementById("dataNasc").value,
-        tabletId: parseInt(tabletId)
+        tabletId: tabletId ? parseInt(tabletId) : null
     };
 
     try {

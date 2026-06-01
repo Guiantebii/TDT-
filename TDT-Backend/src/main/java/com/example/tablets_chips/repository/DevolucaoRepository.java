@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DevolucaoRepository extends JpaRepository<Devolucao,Integer>{
+    void deleteByTabletId(Integer tabletId);
+    void deleteByAlunoId(Integer alunoId);
 }

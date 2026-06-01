@@ -7,7 +7,8 @@ import java.util.Optional;
 
 public interface TabletRepository extends JpaRepository<Tablet, Integer> {
 
-    Optional<Tablet> findByImei(String imei);
-
     boolean existsByImei(String imei);
+    boolean existsByNs(String ns);
+    Optional<Tablet> findByImei(String imei);
+    Optional<Tablet> findByNs(String ns);
 }

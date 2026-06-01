@@ -38,7 +38,7 @@ async function carregarDevolucao() {
     }
 
     try {
-        // Aguarda os selects carregarem primeiro para poder setar o "value"
+
         await carregarSelects(); 
         
         const devolucao = await apiRequest(`/devolucoes/${id}`);
